@@ -1,13 +1,13 @@
 import datetime
 
-from index import Projet, Tache, Equipe, Membre, Jalon, Risque, Changement, EmailNotificationStrategy, SMSNotificationStrategy, PushNotificationStrategy
+from index import Projet, Tache, Membre, Jalon, Risque, EmailNotificationStrategy, SMSNotificationStrategy
 def main():
     # Créer un projet
     projet = Projet(
       "Développement d'une application web",
        "Projet pour développer une application web pour la gestion des tâches",
-      "2024-02-12",
-       "2024-12-21"
+        datetime.date(2024, 7, 1),
+        datetime.date(2024, 12, 1)
     )
 
     # Ajouter des membres de l'équipe
@@ -15,6 +15,11 @@ def main():
     membre2 = Membre("Moukhtar", "Designer")
     projet.ajouter_membre_equipe(membre1)
     projet.ajouter_membre_equipe(membre2)
+    projet.set_notification_strategy(EmailNotificationStrategy())
+    projet.notifier(
+        "Vous avez ete ajouté a l'equipe",
+        [membre1.nom,membre2.nom]
+    )
 
     # Ajouter des tâches
     tache1 = Tache(
