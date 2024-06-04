@@ -67,6 +67,7 @@ def main():
     projet.ajouter_jalon(jalon1)
 
     projet.definir_budget(250000)
+
     projet.generer_rapport_performance()
 
 
