@@ -3,7 +3,8 @@ from abc import ABC, abstractmethod
 
 
 class Projet:
-    """Classe représentant un projet avec ses attributs et méthodes associés."""
+    """Classe représentant un
+     projet avec ses attributs et méthodes associés."""
 
     def __init__(self, nom, description, date_debut, date_fin):
         """Initialise un nouveau projet."""
@@ -43,7 +44,10 @@ class Projet:
     def enregistrer_changement(self, description):
         """Ajoute un nouveau changement  au projet."""
 
-        changement = Changement(description, self.versions, datetime.date.today())
+        changement = Changement(
+            description,
+            self.versions,
+            datetime.date.today())
         self.changements.append(changement)
 
     def ajouter_membre_equipe(self, membre):
@@ -87,7 +91,10 @@ class Projet:
         print("| Chemin Critique : ")
 
         for tache in self.chemin_critique:
-            print("- {} ({}, {}) ".format(tache.nom, tache.date_debut, tache.date_fin))
+            print("- {} ({}, {}) ".format(
+                tache.nom,
+                tache.date_debut,
+                tache.date_fin))
 
     def calculer_chemin_critique(self):
 
@@ -104,7 +111,14 @@ class Tache:
     Classe représentant une tache avec ses attributs et méthodes associés.
     """
 
-    def __init__(self, nom, description, date_debut, date_fin, responsable, statut):
+    def __init__(
+            self,
+            nom,
+            description,
+            date_debut,
+            date_fin,
+            responsable,
+            statut):
         """Initialise une nouvelle tache."""
 
         self.nom = nom
@@ -199,11 +213,13 @@ class NotificationStrategy(ABC):
 
 
 class EmailNotificationStrategy(NotificationStrategy):
-    """la Classe EmailNotificationStrategy qui herite de NotificationStrategy"""
+    """la Classe EmailNotificationStrategy
+    qui herite de NotificationStrategy"""
 
     def envoyer(self, message, destinataire):
         """La methode envoyer par email"""
-        print("Notification envoyée à {} par Email: {}".format(destinataire, message))
+        print("Notification envoyée à {} par Email: {}"
+              .format(destinataire, message))
 
 
 class SMSNotificationStrategy(NotificationStrategy):
@@ -211,7 +227,8 @@ class SMSNotificationStrategy(NotificationStrategy):
 
     def envoyer(self, message, destinataire):
         """La methode envoyer par sms"""
-        print("Notification envoyée à {} par SMS: {}".format(destinataire, message))
+        print("Notification envoyée à {} par SMS: {}"
+              .format(destinataire, message))
 
 
 class PushNotificationStrategy(NotificationStrategy):
@@ -219,4 +236,5 @@ class PushNotificationStrategy(NotificationStrategy):
 
     def envoyer(self, message, destinataire):
         """La methode envoyer par push"""
-        print("Notification envoyée à {} par Push: {}".format(destinataire, message))
+        print("Notification envoyée à {} par Push: {}"
+              .format(destinataire, message))
