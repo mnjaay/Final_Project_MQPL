@@ -38,7 +38,6 @@ class Projet:
 
     def ajouter_jalon(self, jalon):
         """Ajoute un nouveau jalon  au projet."""
-
         self.jalons.append(jalon)
 
     def enregistrer_changement(self, description):
@@ -48,16 +47,15 @@ class Projet:
             description,
             self.versions,
             datetime.date.today())
+
         self.changements.append(changement)
 
     def ajouter_membre_equipe(self, membre):
         """Ajoute un nouveau membre dans l'equipe  au projet."""
-
         self.equipe.ajouter_membre(membre)
 
     def definir_budget(self, budget):
         """definir le bidget du projet."""
-
         self.budget = budget
 
     def generer_rapport_performance(self):
@@ -97,8 +95,27 @@ class Projet:
                 tache.date_fin))
 
     def calculer_chemin_critique(self):
+        """
+        Calculer le chemin critique.
+        """
 
-        pass
+        for tache in self.taches:
+            if not tache.dependances:
+                self.chemin_critique.append([tache])
+            else:
+                for dep in tache.dependances:
+                    for chemin in self.chemin_critique:
+                        if chemin[-1] == dep:
+                            nouveau_chemin = list(chemin)
+                            nouveau_chemin.append(tache)
+                            self.chemin_critique.append(nouveau_chemin)
+
+        chemin_critique = max(self.chemin_critique, key=len)
+        self.chemin_critique = chemin_critique
+
+        print("Chemin critique:")
+        for tache in self.chemin_critique:
+            print(f"- {tache.nom} ({tache.date_debut}, {tache.date_fin})")
 
     def notifier(self, message, destinataires):
         """Envoie une notification selon la stratégie définie."""
