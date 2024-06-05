@@ -1,10 +1,13 @@
-import datetime
 from abc import ABC, abstractmethod
+import datetime
+
+"""
+Module de gestion de projet avec des classes .
+"""
 
 
 class Projet:
-    """Classe représentant un
-     projet avec ses attributs et méthodes associés."""
+    """Classe représentant un projet avec ses attributs et méthodes associés."""
 
     def __init__(self, nom, description, date_debut, date_fin):
         """Initialise un nouveau projet."""
@@ -32,73 +35,57 @@ class Projet:
         self.chemin_critique.append(tache)
 
     def ajouter_risque(self, risque):
-        """Ajoute un nouveau risque  au projet."""
-
+        """Ajoute un nouveau risque au projet."""
         self.risques.append(risque)
 
     def ajouter_jalon(self, jalon):
-        """Ajoute un nouveau jalon  au projet."""
+        """Ajoute un nouveau jalon au projet."""
         self.jalons.append(jalon)
 
     def enregistrer_changement(self, description):
-        """Ajoute un nouveau changement  au projet."""
-
+        """Ajoute un nouveau changement au projet."""
         changement = Changement(
             description,
             self.versions,
             datetime.date.today())
-
         self.changements.append(changement)
 
     def ajouter_membre_equipe(self, membre):
-        """Ajoute un nouveau membre dans l'equipe  au projet."""
+        """Ajoute un nouveau membre dans l'equipe au projet."""
         self.equipe.ajouter_membre(membre)
 
     def definir_budget(self, budget):
-        """definir le bidget du projet."""
+        """Met à jour le budget du projet."""
         self.budget = budget
 
     def generer_rapport_performance(self):
-        """genrer un rapport de performance du projet."""
-
-        print("| Rapport d'activite du projet '{}'".format(self.nom))
-        print("| version {}".format(self.versions))
-        print("| Date :  {} a {}".format(self.date_debut, self.date_fin))
-        print("| Budget : {} XOF".format(self.budget))
-        print("| Taches : ")
+        """Génère un rapport de performance du projet."""
+        print(f"| Rapport d'activité du projet '{self.nom}'")
+        print(f"| version {self.versions}")
+        print(f"| Date :  {self.date_debut} à {self.date_fin}")
+        print(f"| Budget : {self.budget} XOF")
         for tache in self.taches:
             print(
-                "| - {} ({}, {}), Responsable : {}, Statut : {}".format(
-                    tache.nom,
-                    tache.date_debut,
-                    tache.date_fin,
-                    tache.responsable.nom,
-                    tache.statut,
-                )
+                f"| - {tache.nom} ({tache.date_debut}, {tache.date_fin}), "
+                f"Responsable : {tache.responsable.nom}, "
+                f"Statut : {tache.statut}"
             )
         print("| Jalons : ")
         for jalon in self.jalons:
-            print("| - {} ({})".format(jalon.nom, jalon.date))
-        print("| Risque : ")
+            print(f"| - {jalon.nom} ({jalon.date})")
+        print("| Risques : ")
         for risque in self.risques:
             print(
-                "| - {} (Probabilite :{}, Impact : {})".format(
-                    risque.description, risque.probabilite, risque.impact
-                )
+                f"| - {risque.description} "
+                f"(Probabilité : {risque.probabilite}, "
+                f"Impact : {risque.impact})"
             )
         print("| Chemin Critique : ")
-
         for tache in self.chemin_critique:
-            print("- {} ({}, {}) ".format(
-                tache.nom,
-                tache.date_debut,
-                tache.date_fin))
+            print(f"- {tache.nom} ({tache.date_debut}, {tache.date_fin})")
 
     def calculer_chemin_critique(self):
-        """
-        Calculer le chemin critique.
-        """
-
+        """Calcule le chemin critique."""
         for tache in self.taches:
             if not tache.dependances:
                 self.chemin_critique.append([tache])
@@ -120,7 +107,7 @@ class Projet:
     def notifier(self, message, destinataires):
         """Envoie une notification selon la stratégie définie."""
         if self.notification_context is not None:
-            (self.notification_context.notifier(message, destinataires))
+            self.notification_context.notifier(message, destinataires)
 
 
 class Tache:
@@ -128,16 +115,8 @@ class Tache:
     Classe représentant une tache avec ses attributs et méthodes associés.
     """
 
-    def __init__(
-            self,
-            nom,
-            description,
-            date_debut,
-            date_fin,
-            responsable,
-            statut):
+    def __init__(self, nom, description, date_debut, date_fin, responsable, statut):
         """Initialise une nouvelle tache."""
-
         self.nom = nom
         self.description = description
         self.date_debut = date_debut
@@ -147,111 +126,109 @@ class Tache:
         self.dependances = []
 
     def mettre_a_jour_statut(self, statut):
+        """Met à jour le statut de la tâche."""
         self.statut = statut
 
     def ajouter_dependance(self, tache):
+        """Ajoute une dépendance à la tâche."""
         self.dependances.append(tache)
 
 
 class Equipe:
-    """Cree la classe Equipe et ses methodes et attribut
-    ."""
+    """Classe représentant une équipe et ses méthodes associées."""
 
     def __init__(self):
-        """Initialise un nouveau membre."""
+        """Initialise une nouvelle équipe."""
         self.membres = []
 
     def ajouter_membre(self, membre):
-        """ajoute un nouveau membre."""
+        """Ajoute un nouveau membre à l'équipe."""
         self.membres.append(membre)
 
     def obtenir_membre(self):
-        """obtenir les membres."""
+        """Obtient les membres de l'équipe."""
         return self.membres
 
 
 class Membre:
-    """la classe membre avec ses methodes et attribut"""
+    """Classe représentant un membre d'équipe."""
 
     def __init__(self, nom, role):
-        """initialise la classe membre"""
+        """Initialise un nouveau membre."""
         self.nom = nom
         self.role = role
 
 
 class Jalon:
-    """la classe jalon avec ses methodes et attribut"""
+    """Classe représentant un jalon dans le projet."""
 
     def __init__(self, nom, date):
-        """initialise la classe jalon"""
+        """Initialise un nouveau jalon."""
         self.nom = nom
         self.date = date
 
 
 class Risque:
-    """la classe risque avec ses methodes et attribut"""
+    """Classe représentant un risque dans le projet."""
 
     def __init__(self, description, probabilite, impact):
-        """initialise la classe risque"""
+        """Initialise un nouveau risque."""
         self.description = description
         self.probabilite = probabilite
         self.impact = impact
 
 
 class Changement:
-    """la classe Changement avec ses methodes et attribut"""
+    """Classe représentant un changement dans le projet."""
 
     def __init__(self, description, version, date):
-        """initialise la classe changement"""
+        """Initialise un nouveau changement."""
         self.description = description
         self.version = version
         self.date = date
 
 
 class NotificationContext:
-    """la classe NotificationContext avec ses methodes et attribut"""
+    """Classe représentant le contexte de notification."""
 
     def __init__(self, strategy):
-        """initialise la classe NotificationContext"""
+        """Initialise le contexte de notification."""
         self.strategy = strategy
 
     def notifier(self, message, destinataires):
-        """Notifier les membres avec un message"""
+        """Envoie une notification selon la stratégie définie."""
         if self.strategy:
             self.strategy.envoyer(message, destinataires)
 
 
 class NotificationStrategy(ABC):
-    """l'interface NotificationStrategy  avec ses methodes"""
+    """Interface pour les stratégies de notification."""
 
     @abstractmethod
     def envoyer(self, message, destinataire):
+        """Méthode pour envoyer une notification."""
         pass
 
 
 class EmailNotificationStrategy(NotificationStrategy):
-    """la Classe EmailNotificationStrategy
-    qui herite de NotificationStrategy"""
+    """Stratégie de notification par email."""
 
     def envoyer(self, message, destinataire):
-        """La methode envoyer par email"""
-        print("Notification envoyée à {} par Email: {}"
-              .format(destinataire, message))
+        """Envoie une notification par email."""
+        print(f"Notification envoyée à {destinataire} par Email: {message}")
 
 
 class SMSNotificationStrategy(NotificationStrategy):
-    """la Classe SMSNotificationStrategy qui herite de NotificationStrategy"""
+    """Stratégie de notification par SMS."""
 
     def envoyer(self, message, destinataire):
-        """La methode envoyer par sms"""
-        print("Notification envoyée à {} par SMS: {}"
-              .format(destinataire, message))
+        """Envoie une notification par SMS."""
+        print(f"Notification envoyée à {destinataire} par SMS: {message}")
 
 
 class PushNotificationStrategy(NotificationStrategy):
-    """la Classe PushNotificationStrategy qui herite de NotificationStrategy"""
+    """Stratégie de notification par push."""
 
     def envoyer(self, message, destinataire):
-        """La methode envoyer par push"""
-        print("Notification envoyée à {} par Push: {}"
-              .format(destinataire, message))
+        """Envoie une notification par push."""
+        print(f"Notification envoyée à {destinataire} par Push: {message}")
